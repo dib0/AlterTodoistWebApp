@@ -8,11 +8,11 @@ using TodoistAPI;
 
 namespace AlterTodoistWebApp
 {
-    public partial class Default : System.Web.UI.Page
+    public partial class Default : BasePage
     {
-        protected void Page_Load(object sender, EventArgs e)
+        protected override void Page_Load(object sender, EventArgs e)
         {
-            TodoistRequest tr = new TodoistRequest();
+            base.Page_Load(sender, e);
         }
     }
 }

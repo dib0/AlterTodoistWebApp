@@ -61,6 +61,7 @@ namespace TodoistAPI
             {
                 LoginResult result = PerformGetRequest<LoginResult>(uri);
                 Token = result.token;
+                loggedIn = true;
             }
             catch
             {

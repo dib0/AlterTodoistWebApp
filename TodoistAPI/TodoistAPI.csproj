@@ -40,7 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\LoginResult.cs" />
-    <Compile Include="Data\TodoistRequest.cs" />
+    <Compile Include="TodoistRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
