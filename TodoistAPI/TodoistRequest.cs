@@ -16,6 +16,9 @@ namespace TodoistAPI
         #region Private properties
         private const string baseUri = "todoist.com";
         private const string loginUri = "/API/login?email={0}&password={1}";
+        private const string tokenUri = "token={0}";
+        private const string queryUri = "/API/query?";
+        private const string queryFilterUri = "&queries=\"{0}\"";
 
         private bool UseSecureConnection
         { get; set; }
@@ -69,6 +72,33 @@ namespace TodoistAPI
             }
 
             return loggedIn;
+        }
+
+        public void GetItemsToday()
+        {
+            QueryItems("today");
+        }
+
+        public void QueryItems(params string[] queries)
+        {
+            if (string.IsNullOrEmpty(Token))
+                throw new Exception("Not logged in.");
+            if ((queries == null) || (queries.Count() == 0))
+                throw new Exception("No query specified.");
+
+            string uri = baseUri + queryUri + string.Format(tokenUri, Token);
+            // Add filters
+            string filters = string.Empty;
+            for (int i=0; i< queries.Count(); i++)
+            {
+                if (i > 0)
+                    filters += "," + queries[i];
+                else
+                    filters += queries[i];
+            }
+            uri += string.Format(queryFilterUri, filters);
+
+            QueryResult[] result = PerformGetRequest<QueryResult[]>(uri);
         }
         #endregion
 

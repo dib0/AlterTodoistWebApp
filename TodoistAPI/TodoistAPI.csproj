@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\QueryDataResult.cs" />
+    <Compile Include="Business\QueryResult.cs" />
     <Compile Include="Business\LoginResult.cs" />
     <Compile Include="TodoistRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
