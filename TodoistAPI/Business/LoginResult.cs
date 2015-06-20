@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TodoistAPI.Business
 {
-    class LoginResult
+    public class LoginResult
     {
         #region
         public string token;

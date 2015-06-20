@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Configuration;
 using System.Web;
 using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using TodoistAPI;
 
 namespace AlterTodoistWebApp
@@ -14,6 +11,7 @@ namespace AlterTodoistWebApp
         #region Protected methods
         protected void btnLogin_Click(object sender, EventArgs e)
         {
+            Response.Write("test");
             string uname = tbUsername.Text;
             string pw = tbPassword.Text;
 
@@ -21,7 +19,7 @@ namespace AlterTodoistWebApp
             if (tr.Login(uname, pw))
             {
                 CreateCookie(tr.Token);
-                Response.Redirect("~/Default.aspx");
+                Response.Redirect(ConfigurationManager.AppSettings["DefaultPage"]);
             }
         }
         #endregion

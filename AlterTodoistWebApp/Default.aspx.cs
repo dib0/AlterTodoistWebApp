@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using TodoistAPI;
+using TodoistAPI.Business;
 
 namespace AlterTodoistWebApp
 {
@@ -14,7 +15,12 @@ namespace AlterTodoistWebApp
         {
             base.Page_Load(sender, e);
 
-            todoist.QueryItems("overdue", "today");
+            QueryResult result = todoist.QueryItems("overdue", "today");
+            if (result.data != null && result.data.Count>0)
+            {
+                foreach (QueryDataResult r in result.data)
+                    Response.Write(r.content + " " + r.due_date + "<br />");
+            }
         }
     }
 }

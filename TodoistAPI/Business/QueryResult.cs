@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TodoistAPI.Business
 {
-    class QueryResult
+    public class QueryResult
     {
         #region
         public string query;

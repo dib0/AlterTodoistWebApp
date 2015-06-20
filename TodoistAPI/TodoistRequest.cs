@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Web.Script.Serialization;
 using TodoistAPI.Business;
 
@@ -79,7 +78,7 @@ namespace TodoistAPI
             QueryItems("today");
         }
 
-        public void QueryItems(params string[] queries)
+        public QueryResult QueryItems(params string[] queries)
         {
             if (string.IsNullOrEmpty(Token))
                 throw new Exception("Not logged in.");
@@ -98,7 +97,7 @@ namespace TodoistAPI
             }
             uri += string.Format(queryFilterUri, filters);
 
-            QueryResult[] result = PerformGetRequest<QueryResult[]>(uri);
+            return PerformGetRequest<List<QueryResult>>(uri).FirstOrDefault();
         }
         #endregion
 
@@ -116,7 +115,11 @@ namespace TodoistAPI
             if (UseSecureConnection)
             {
                 // Override automatic validation of SSL server certificates.
-                ServicePointManager.ServerCertificateValidationCallback = ValidateServerCertficate;
+                try
+                {
+                    ServicePointManager.ServerCertificateValidationCallback = ValidateServerCertficate;
+                }
+                catch { }
             }
 
             return request;
