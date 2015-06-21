@@ -11,7 +11,6 @@ namespace AlterTodoistWebApp
         #region Protected methods
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-            Response.Write("test");
             string uname = tbUsername.Text;
             string pw = tbPassword.Text;
 
