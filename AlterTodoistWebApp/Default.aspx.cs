@@ -108,6 +108,11 @@ namespace AlterTodoistWebApp
         #endregion
 
         #region Events
+        protected void btnAdd_Click(object sender, ImageClickEventArgs e)
+        {
+            Response.Redirect("AddItem.aspx");
+        }
+
         private void CompleteButton_Click(object sender, ImageClickEventArgs e)
         {
             ImageButton button = sender as ImageButton;

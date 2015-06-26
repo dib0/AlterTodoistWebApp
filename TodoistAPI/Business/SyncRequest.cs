@@ -11,6 +11,7 @@ namespace TodoistAPI.Business
         public string type;
         public T args;
         public string uuid = Guid.NewGuid().ToString();
+        public string temp_id = Guid.NewGuid().ToString();
         #endregion
     }
 }

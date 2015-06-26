@@ -3,7 +3,7 @@ body {
     font-size: 0.9em;
 }
 
-.loginform {
+.loginform, .addform {
     width : 100%;
 }
 
@@ -12,7 +12,7 @@ body {
     height: 100%;
 }
 
-.loginblock {
+.loginblock, .addblock {
     text-align: left;
     width : 450px;
     margin-left:auto;
@@ -60,4 +60,25 @@ body {
     right:0px;
     position:fixed;
     margin-top:-73px;
+}
+
+.footer
+{
+    position: fixed;
+    left:0px;
+    right:0px;
+    bottom: 0px;
+
+    height: 15px;
+    border-top:solid 1px lightgray;
+    text-align: right;
+    font-size: smaller;
+    color: lightgray;
+    font-style:italic;
+
+    padding-right: 5px;
+}
+
+.projectlb {
+    max-width:195px;
 }

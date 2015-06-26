@@ -5,14 +5,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Todo - Division by Zero</title>
-	<link rel="stylesheet" href="./css/pure-min.css">
-	<link rel="stylesheet" href="./css/todo.css">
+	<link rel="stylesheet" href="./css/pure-min.css" />
+	<link rel="stylesheet" href="./css/todo.css" />
+    <script src="./Scripts/jquery-min.js"></script>
 
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 <body>
     <asp:ContentPlaceHolder ID="body" runat="server">
+        
+    </asp:ContentPlaceHolder>
+
+    <div id="divFooter" class="footer">
+        Alternative user interface on Todoist, (C)opyright 2015, Division by Zero
+    </div>
+
+    <asp:ContentPlaceHolder ID="scripts" runat="server">
         
     </asp:ContentPlaceHolder>
 </body>

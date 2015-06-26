@@ -26,9 +26,6 @@ namespace TodoistAPI
 
         private string ContentType
         { get; set; }
-
-        private int last_seq_no = 0;
-        private int last_seq_no_global = 0;
         #endregion
 
         #region Public properties
@@ -152,12 +149,41 @@ namespace TodoistAPI
 
             SyncResult result = PerformPostRequest<List<SyncRequest<SyncRecurringArgsRequest>>, SyncResult>(requests, uri);
         }
+
+        public List<Project> GetProjects()
+        {
+            string uri = baseUri + syncUri;
+            string data = "seq_no=0&seq_no_global=0&resource_types=[\"projects\"]";
+
+            ProjectResult result = PerformPostRequest<ProjectResult>(data, uri);
+            result.Projects.Sort(new Comparison<Project>(CompareProject));
+            return result.Projects;
+        }
+
+        public void AddNewItem(SyncAddItemArgsRequest item)
+        {
+            string uri = baseUri + syncUri;
+
+            SyncRequest<SyncAddItemArgsRequest> req = new SyncRequest<SyncAddItemArgsRequest>();
+            req.type = "item_add";
+            req.args = item;
+
+            List<SyncRequest<SyncAddItemArgsRequest>> requests = new List<SyncRequest<SyncAddItemArgsRequest>>();
+            requests.Add(req);
+
+            SyncResult result = PerformPostRequest<List<SyncRequest<SyncAddItemArgsRequest>>, SyncResult>(requests, uri);
+        }
         #endregion
 
         #region Private methods
         private static int CompareDate(QueryDataResult a, QueryDataResult b)
         {
             return a.due_date.CompareTo(b.due_date);
+        }
+
+        private static int CompareProject(Project a, Project b)
+        {
+            return a.item_order.CompareTo(b.item_order);
         }
 
         private string AddProtocol(string uri)
@@ -181,6 +207,29 @@ namespace TodoistAPI
             }
 
             return request;
+        }
+
+        private I PerformPostRequest<I>(string input, string uri)
+        {
+            HttpWebRequest request = GetWebRequest(uri);
+
+            string inputString = string.Format(tokenUri, Token);
+            inputString += "&" + input;
+
+            // Add the input object
+            request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = inputString.Count();
+            using (StreamWriter sw = new StreamWriter(request.GetRequestStream()))
+                sw.Write(inputString);
+
+            // Get the result
+            string resultString = PerformRequest(request);
+
+            // Serialize to object
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            I result = js.Deserialize<I>(resultString);
+            return result;
         }
 
         private I PerformPostRequest<T, I>(T input, string uri)

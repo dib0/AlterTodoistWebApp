@@ -39,10 +39,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\Project.cs" />
     <Compile Include="Business\QueryDataResult.cs" />
+    <Compile Include="Business\SyncAddItemArgsRequest.cs" />
     <Compile Include="Business\SyncRecurringArgsRequest.cs" />
     <Compile Include="Business\SyncArgsRequest.cs" />
     <Compile Include="Business\SyncRequest.cs" />
+    <Compile Include="Business\ProjectResult.cs" />
     <Compile Include="Business\SyncResult.cs" />
     <Compile Include="Business\QueryResult.cs" />
     <Compile Include="Business\LoginResult.cs" />

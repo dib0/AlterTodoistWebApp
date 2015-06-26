@@ -21,3 +21,11 @@
       </div>
     </form>
 </asp:Content>
+
+<asp:Content ContentPlaceHolderID="scripts" ID="cntScript" runat="server">
+    <script>
+        $(document).ready(function () {
+            $('form:first *:input[type!=hidden]:first').focus();
+        });
+    </script>
+</asp:Content>
