@@ -69,7 +69,7 @@ namespace AlterTodoistWebApp
                     completeButton.CssClass = "pure-img graphbutton";
                     completeButton.Click += CompleteButton_Click;
                     todoItemDiv.Controls.Add(completeButton);
-
+                    
                     ImageButton editButton = new ImageButton();
                     editButton.ID = "edit_" + r.id.ToString();
                     editButton.ImageUrl = "./images/edit.png";
