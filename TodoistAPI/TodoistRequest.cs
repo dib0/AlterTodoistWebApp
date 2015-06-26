@@ -13,17 +13,22 @@ namespace TodoistAPI
     public class TodoistRequest
     {
         #region Private properties
-        private const string baseUri = "todoist.com";
-        private const string loginUri = "/API/login?email={0}&password={1}";
+        private const string baseUri = "todoist.com/API/v6";
+        private const string loginUri = "/login?email={0}&password={1}";
         private const string tokenUri = "token={0}";
-        private const string queryUri = "/API/query?";
+        private const string queryUri = "/query?";
         private const string queryFilterUri = "&queries=\"{0}\"";
+        private const string commandUri = "&commands={0}";
+        private const string syncUri = "/sync";
 
         private bool UseSecureConnection
         { get; set; }
 
         private string ContentType
         { get; set; }
+
+        private int last_seq_no = 0;
+        private int last_seq_no_global = 0;
         #endregion
 
         #region Public properties
@@ -73,12 +78,12 @@ namespace TodoistAPI
             return loggedIn;
         }
 
-        public void GetItemsToday()
+        public List<QueryDataResult> GetItemsToday()
         {
-            QueryItems("today");
+            return QueryItems("today");
         }
 
-        public QueryResult QueryItems(params string[] queries)
+        public List<QueryDataResult> QueryItems(params string[] queries)
         {
             if (string.IsNullOrEmpty(Token))
                 throw new Exception("Not logged in.");
@@ -97,11 +102,64 @@ namespace TodoistAPI
             }
             uri += string.Format(queryFilterUri, filters);
 
-            return PerformGetRequest<List<QueryResult>>(uri).FirstOrDefault();
+            List<QueryResult> qResult = PerformGetRequest<List<QueryResult>>(uri);
+            List<QueryDataResult> result = new List<QueryDataResult>();
+            foreach(QueryResult q in qResult)
+            {
+                foreach(QueryDataResult qd in q.data)
+                {
+                    QueryDataResult i = result.FirstOrDefault(j => j.id == qd.id);
+                    if (i == null)
+                        result.Add(qd);
+                }
+            }
+
+            result.Sort(new Comparison<QueryDataResult>(CompareDate));
+            return result;
+        }
+
+        public void CompleteItem(int projectId, params int[] itemIds)
+        {
+            if (itemIds == null || itemIds.Count() == 0)
+                throw new ArgumentException("No project id(s) are given.");
+
+            string uri = baseUri + syncUri;
+
+            SyncRequest<SyncArgsRequest> req = new SyncRequest<SyncArgsRequest>();
+            req.type = "item_complete";
+            req.args = new SyncArgsRequest();
+            req.args.project_id = projectId;
+            foreach (int iId in itemIds)
+                req.args.ids.Add(iId);
+
+            List<SyncRequest<SyncArgsRequest>> requests = new List<SyncRequest<SyncArgsRequest>>();
+            requests.Add(req);
+
+            SyncResult result = PerformPostRequest<List<SyncRequest<SyncArgsRequest>>, SyncResult>(requests, uri);
+        }
+
+        public void CompleteRecurringItem(int itemId)
+        {
+            string uri = baseUri + syncUri;
+
+            SyncRequest<SyncRecurringArgsRequest> req = new SyncRequest<SyncRecurringArgsRequest>();
+            req.type = "item_update_date_complete";
+            req.args = new SyncRecurringArgsRequest();
+            req.args.id = itemId;
+
+            List<SyncRequest<SyncRecurringArgsRequest>> requests = new List<SyncRequest<SyncRecurringArgsRequest>>();
+            requests.Add(req);
+
+            SyncResult result = PerformPostRequest<List<SyncRequest<SyncRecurringArgsRequest>>, SyncResult>(requests, uri);
         }
         #endregion
 
         #region Private methods
+        private static int CompareDate(QueryDataResult a, QueryDataResult b)
+        {
+            return a.due_date.CompareTo(b.due_date);
+        }
+
         private string AddProtocol(string uri)
         {
             return UseSecureConnection ? "https://" + uri : "http://" + uri;
@@ -128,11 +186,14 @@ namespace TodoistAPI
         private I PerformPostRequest<T, I>(T input, string uri)
         {
             HttpWebRequest request = GetWebRequest(uri);
+
             JavaScriptSerializer js = new JavaScriptSerializer();
-            string inputString = js.Serialize(input);
+            string inputString = string.Format(tokenUri, Token);
+            inputString += string.Format(commandUri, js.Serialize(input));
 
             // Add the input object
             request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
             request.ContentLength = inputString.Count();
             using (StreamWriter sw = new StreamWriter(request.GetRequestStream()))
                 sw.Write(inputString);

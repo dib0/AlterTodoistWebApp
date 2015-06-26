@@ -5,11 +5,11 @@ using System.Text;
 
 namespace TodoistAPI.Business
 {
-    public class LoginResult
+    public class SyncRecurringArgsRequest
     {
         #region
-        public string token;
-        public string uuid;
+        public int id;
+        public int is_forward=1;
         #endregion
     }
 }

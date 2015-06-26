@@ -1,16 +1,15 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="AlterTodoistWebApp.Default" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" MasterPageFile="~/Base.Master" Inherits="AlterTodoistWebApp.Default" %>
+<asp:Content ContentPlaceHolderID="head" ID="addedHeaders" runat="server">
+    <meta http-equiv="refresh" content="120">
+</asp:Content>
 
-<!DOCTYPE html>
+<asp:Content ContentPlaceHolderID="body" ID="defaultBody" runat="server">
+    <form id="form1" class="mainForm" runat="server">
+        <div id="menu" class="menu">
+            <asp:ImageButton ID="btnRefresh" ImageUrl="./images/refresh.png" CssClass="pure-img graphbutton" runat="server" />
+            <asp:ImageButton ID="btnAdd" ImageUrl="./images/add.png" CssClass="pure-img graphbutton" runat="server" />
+        </div>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
-    <div>
-    
-    </div>
+        <div id="itemList" class="todoitemlist" runat="server"></div>
     </form>
-</body>
-</html>
+</asp:Content>

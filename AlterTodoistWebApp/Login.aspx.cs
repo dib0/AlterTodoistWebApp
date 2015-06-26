@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AlterTodoistWebApp.Util;
+using System;
 using System.Configuration;
 using System.Web;
 using System.Web.Security;
@@ -29,9 +30,8 @@ namespace AlterTodoistWebApp
             string CookieUserId = "TDATKN1";
 
             HttpCookie cookie = new HttpCookie(CookieUserId);
-            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(token, true, -1);
-            cookie.Value = FormsAuthentication.Encrypt(ticket);
-            cookie.Expires = DateTime.MaxValue;
+            cookie.Value = StringCipher.Encrypt(token);
+            cookie.Expires = DateTime.Now.AddYears(2);
 
             Response.Cookies.Add(cookie);
         }

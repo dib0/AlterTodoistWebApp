@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AlterTodoistWebApp.Util;
+using System;
 using System.Configuration;
 using System.Web.Security;
 using TodoistAPI;
@@ -29,14 +30,15 @@ namespace AlterTodoistWebApp
             {
                 try
                 {
-                    FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(Request.Cookies[CookieUserId].Value);
-                    returnValue = ticket.Name;
+                    returnValue = StringCipher.Decrypt(Request.Cookies[CookieUserId].Value);
 
                     if (string.IsNullOrEmpty(returnValue))
                     {
                         // Redirect to the login page
                         Response.Redirect(ConfigurationManager.AppSettings["LoginPage"]);
                     }
+                    else  // Reset the expires time
+                        Request.Cookies[CookieUserId].Expires = DateTime.Now.AddYears(2);
                 }
                 catch
                 {
