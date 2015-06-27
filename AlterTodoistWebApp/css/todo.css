@@ -80,5 +80,14 @@ body {
 }
 
 .projectlb {
-    max-width:195px;
+    max-width:250px;
+    min-width:250px;
+}
+
+.version {
+    display: inline;
+    left: 0px;
+    margin-left: 2px;
+    margin-top: 0px;
+    position: absolute;
 }

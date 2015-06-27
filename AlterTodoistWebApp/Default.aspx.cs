@@ -135,7 +135,17 @@ namespace AlterTodoistWebApp
 
         private void EditButton_Click(object sender, ImageClickEventArgs e)
         {
-
+            ImageButton button = sender as ImageButton;
+            if (button != null)
+            {
+                int itemId = GetID(button.ID);
+                QueryDataResult item = todoistItems.FirstOrDefault(i => i.id == itemId);
+                if (item != null)
+                {
+                    Session["editableItem"] = item;
+                    Response.Redirect("EditItem.aspx");
+                }
+            }
         }
 
         protected void btnRefresh_Click(object sender, ImageClickEventArgs e)

@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Business\Project.cs" />
     <Compile Include="Business\QueryDataResult.cs" />
+    <Compile Include="Business\SyncUpdateItemArgsRequest.cs" />
     <Compile Include="Business\SyncAddItemArgsRequest.cs" />
     <Compile Include="Business\SyncRecurringArgsRequest.cs" />
     <Compile Include="Business\SyncArgsRequest.cs" />

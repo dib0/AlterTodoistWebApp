@@ -18,6 +18,7 @@
     </asp:ContentPlaceHolder>
 
     <div id="divFooter" class="footer">
+        <p class="version">V1.0</p>
         Alternative user interface on Todoist, (C)opyright 2015, Division by Zero
     </div>
 

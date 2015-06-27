@@ -173,6 +173,20 @@ namespace TodoistAPI
 
             SyncResult result = PerformPostRequest<List<SyncRequest<SyncAddItemArgsRequest>>, SyncResult>(requests, uri);
         }
+
+        public void UpdateItem(SyncUpdateItemArgsRequest item)
+        {
+            string uri = baseUri + syncUri;
+
+            SyncRequest<SyncUpdateItemArgsRequest> req = new SyncRequest<SyncUpdateItemArgsRequest>();
+            req.type = "item_update";
+            req.args = item;
+
+            List<SyncRequest<SyncUpdateItemArgsRequest>> requests = new List<SyncRequest<SyncUpdateItemArgsRequest>>();
+            requests.Add(req);
+
+            SyncResult result = PerformPostRequest<List<SyncRequest<SyncUpdateItemArgsRequest>>, SyncResult>(requests, uri);
+        }
         #endregion
 
         #region Private methods

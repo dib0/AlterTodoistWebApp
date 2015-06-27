@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AddItem.aspx.cs" MasterPageFile="./Base.Master" Inherits="AlterTodoistWebApp.AddItem" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="EditItem.aspx.cs" MasterPageFile="./Base.Master" Inherits="AlterTodoistWebApp.EditItem" %>
 
 <asp:Content ContentPlaceHolderID="head" ID="defaultHead" runat="server">
     <link href="./css/select2.min.css" rel="stylesheet" />

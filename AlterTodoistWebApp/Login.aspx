@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" MasterPageFile="~/Base.Master" Inherits="AlterTodoistWebApp.Login" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" MasterPageFile="./Base.Master" Inherits="AlterTodoistWebApp.Login" %>
 <asp:Content ContentPlaceHolderID="body" ID="defaultBody" runat="server">
     <form id="form1" class="pure-form pure-form-aligned loginform" runat="server">
     <div class="loginblock">

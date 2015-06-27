@@ -9,14 +9,18 @@ using TodoistAPI.Business;
 
 namespace AlterTodoistWebApp
 {
-    public partial class AddItem : BasePage
+    public partial class EditItem : BasePage
     {
         #region Overridden methods
         protected override void Page_Load(object sender, EventArgs e)
         {
             base.Page_Load(sender, e);
 
-            LoadProjects();
+            if (!IsPostBack)
+            {
+                LoadProjects();
+                ShowCurrentValues();
+            }
         }
         #endregion
 
@@ -33,6 +37,24 @@ namespace AlterTodoistWebApp
                 ddlProject.Items.Add(new ListItem(txt, p.id));
             }
         }
+
+        private void ShowCurrentValues()
+        {
+            QueryDataResult item = Session["editableItem"] as QueryDataResult;
+            if (item != null)
+            {
+                tbTodoText.Text = item.content;
+                tbDueDate.Text = item.date_string;
+                
+                foreach (ListItem ddlItem in ddlProject.Items)
+                {
+                    if (ddlItem.Value == item.project_id.ToString())
+                        ddlItem.Selected = true;
+                }
+            }
+            else
+                Response.Redirect(ConfigurationManager.AppSettings["DefaultPage"]);
+        }
         #endregion
 
         #region Events
@@ -42,11 +64,13 @@ namespace AlterTodoistWebApp
             string dueDate = tbDueDate.Text;
             long pId = long.Parse(ddlProject.SelectedValue);
 
-            SyncAddItemArgsRequest request = new SyncAddItemArgsRequest();
+            QueryDataResult item = Session["editableItem"] as QueryDataResult;
+            SyncUpdateItemArgsRequest request = new SyncUpdateItemArgsRequest();
+            request.id = item.id;
             request.content = content;
             request.date_string = dueDate;
             request.project_id = pId;
-            todoist.AddNewItem(request);
+            todoist.UpdateItem(request);
 
             Response.Redirect(ConfigurationManager.AppSettings["DefaultPage"]);
         }
