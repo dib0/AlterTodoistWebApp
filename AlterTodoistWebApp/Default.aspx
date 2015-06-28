@@ -1,6 +1,10 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" MasterPageFile="./Base.Master" Inherits="AlterTodoistWebApp.Default" %>
+
 <asp:Content ContentPlaceHolderID="head" ID="addedHeaders" runat="server">
     <meta http-equiv="refresh" content="600">
+
+    <link href="./css/select2.min.css" rel="stylesheet" />
+    <script src="./Scripts/select2.min.js"></script>
 </asp:Content>
 
 <asp:Content ContentPlaceHolderID="body" ID="defaultBody" runat="server">
@@ -16,4 +20,12 @@
 
         <div id="itemList" class="todoitemlist" runat="server"></div>
     </form>
+</asp:Content>
+
+<asp:Content ContentPlaceHolderID="scripts" ID="cntScript" runat="server">
+    <script>
+        $(document).ready(function () {
+            $('select').select2();
+        });
+    </script>
 </asp:Content>

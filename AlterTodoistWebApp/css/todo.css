@@ -78,6 +78,7 @@ body {
     font-style:italic;
 
     padding-right: 5px;
+	background-color: white;
 }
 
 .projectlb {
@@ -94,8 +95,8 @@ body {
 }
 
 .viewlb {
-    max-width:100px;
-    min-width:100px;
+    max-width:150px;
+    min-width:150px;
 }
 
 .viewselection {
