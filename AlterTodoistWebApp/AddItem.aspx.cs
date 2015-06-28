@@ -23,8 +23,7 @@ namespace AlterTodoistWebApp
         #region Private methods
         private void LoadProjects()
         {
-            List<Project> pr = todoist.GetProjects();
-            foreach (Project p in pr)
+            foreach (Project p in Projects)
             {
                 string txt = p.name;
                 if (p.indent > 1)

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" MasterPageFile="./Base.Master" Inherits="AlterTodoistWebApp.Default" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ViewProject.aspx.cs" MasterPageFile="./Base.Master" Inherits="AlterTodoistWebApp.ViewProject" %>
 <asp:Content ContentPlaceHolderID="head" ID="addedHeaders" runat="server">
     <meta http-equiv="refresh" content="600">
 </asp:Content>

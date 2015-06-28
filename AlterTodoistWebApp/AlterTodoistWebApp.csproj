@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ViewProject.aspx" />
     <Content Include="EditItem.aspx" />
     <Content Include="AddItem.aspx" />
     <Content Include="css\pure-min.css" />
@@ -68,6 +69,13 @@
     <Content Include="Login.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewProject.aspx.cs">
+      <DependentUpon>ViewProject.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ViewProject.aspx.designer.cs">
+      <DependentUpon>ViewProject.aspx</DependentUpon>
+    </Compile>
     <Compile Include="EditItem.aspx.cs">
       <DependentUpon>EditItem.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

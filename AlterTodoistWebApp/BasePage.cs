@@ -1,8 +1,10 @@
 ﻿using AlterTodoistWebApp.Util;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Web.Security;
 using TodoistAPI;
+using TodoistAPI.Business;
 
 namespace AlterTodoistWebApp
 {
@@ -10,6 +12,21 @@ namespace AlterTodoistWebApp
     {
         #region Protected properties
         protected TodoistRequest todoist;
+
+        protected List<Project> Projects
+        {
+            get
+            {
+                List<Project> projects = Session["projects"] as List<Project>;
+                if (projects == null)
+                {
+                    projects = LoadProjects();
+                    Session["projects"] = projects;
+                }
+
+                return projects;
+            }
+        }
         #endregion
 
         #region Protected methods
@@ -49,6 +66,13 @@ namespace AlterTodoistWebApp
                 Response.Redirect(ConfigurationManager.AppSettings["LoginPage"]);
 
             return returnValue;
+        }
+        #endregion
+
+        #region Private methods
+        private List<Project> LoadProjects()
+        {
+            return todoist.GetProjects();
         }
         #endregion
     }

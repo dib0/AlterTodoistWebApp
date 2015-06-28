@@ -9,16 +9,21 @@ using System.Configuration;
 
 namespace AlterTodoistWebApp
 {
-    public partial class Default : BasePage
+    public partial class ViewProject : BasePage
     {
         #region Private properties
-        List<QueryDataResult> todoistItems=null;
+        List<Item> todoistItems=null;
+        Project selected;
         #endregion
 
         #region Protected method
         protected override void Page_Load(object sender, EventArgs e)
         {
             base.Page_Load(sender, e);
+
+            selected = Session["viewproject"] as Project;
+            if (selected == null)
+                Response.Redirect(ConfigurationManager.AppSettings["DefaultPage"]);
 
             if (!IsPostBack)
                 LoadProjects();
@@ -39,13 +44,17 @@ namespace AlterTodoistWebApp
                 if (p.indent > 1)
                     txt = txt.PadLeft(txt.Length + p.indent, '-');
 
-                ddlProject.Items.Add(new ListItem(txt, p.id));
+                ListItem item = new ListItem(txt, p.id);
+                if (p.id == selected.id)
+                    item.Selected = true;
+
+                ddlProject.Items.Add(item);
             }
         }
 
         private void LoadTodoItems()
         {
-            todoistItems = todoist.QueryItems("over due", "today");
+            todoistItems = todoist.GetTasksForProject(selected.id);
         }
 
         private void BuildTodoList()
@@ -54,30 +63,13 @@ namespace AlterTodoistWebApp
 
             if (todoistItems != null && todoistItems.Count > 0)
             {
-                DateTime lastDate = DateTime.MinValue;
-                DateTime today = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-                foreach (QueryDataResult r in todoistItems)
+                HtmlGenericControl titleDiv = new HtmlGenericControl("div");
+                titleDiv.Attributes["class"] = "titletext title";
+                titleDiv.InnerHtml = selected.name;
+                itemList.Controls.Add(titleDiv);
+
+                foreach (Item r in todoistItems)
                 {
-                    DateTime checkDate = new DateTime(r.due_date.Year, r.due_date.Month, r.due_date.Day);
-                    
-                    // Check title
-                    if (checkDate > lastDate)
-                    {
-                        HtmlGenericControl titleDiv = new HtmlGenericControl("div");
-                        titleDiv.Attributes["class"] = "titletext title";
-
-                        // Different days, so a title is needed
-                        if (checkDate == today)
-                            titleDiv.InnerHtml = "Today";
-                        else if (checkDate < today)
-                            titleDiv.InnerHtml = "Over due";
-                        else
-                            titleDiv.InnerHtml = checkDate.ToString("dd-MM-yyyy");
-
-                        itemList.Controls.Add(titleDiv);
-                        lastDate = checkDate;
-                    }
-
                     HtmlGenericControl todoItemDiv = new HtmlGenericControl("div");
                     todoItemDiv.Attributes["class"] = "todoitem";
 
@@ -98,8 +90,11 @@ namespace AlterTodoistWebApp
                     HtmlGenericControl singleItemDiv = new HtmlGenericControl("div");
                     singleItemDiv.Attributes["class"] = "itemtext";
                     singleItemDiv.InnerHtml = r.content;
-                    if (r.due_date.ToString("HH:mm") != "23:59")
-                        singleItemDiv.InnerHtml += "&nbsp;(" + r.due_date.ToString("HH:mm") + ")";
+                    if (r.due_date.HasValue)
+                    {
+                        if (r.due_date.Value.ToString("HH:mm") != "23:59")
+                            singleItemDiv.InnerHtml += "&nbsp;(" + r.due_date.Value.ToString("HH:mm") + ")";
+                    }
                     todoItemDiv.Controls.Add(singleItemDiv);
 
                     itemList.Controls.Add(todoItemDiv);
@@ -109,7 +104,7 @@ namespace AlterTodoistWebApp
             {
                 HtmlGenericControl titleDiv = new HtmlGenericControl("div");
                 titleDiv.Attributes["class"] = "titletext title";
-                titleDiv.InnerHtml = "Today";
+                titleDiv.InnerHtml = selected.name;
                 itemList.Controls.Add(titleDiv);
 
                 HtmlGenericControl singleItemDiv = new HtmlGenericControl("div");
@@ -142,13 +137,13 @@ namespace AlterTodoistWebApp
             if (button != null)
             {
                 int itemId = GetID(button.ID);
-                QueryDataResult item = todoistItems.FirstOrDefault(i => i.id == itemId);
+                Item item = todoistItems.FirstOrDefault(i => i.id == itemId);
                 if (item != null)
                 {
                     if (item.IsRecurring)
                         todoist.CompleteRecurringItem(item.id);
                     else
-                        todoist.CompleteItem(item.project_id, item.id);
+                        todoist.CompleteItem(int.Parse(item.project_id), item.id);
                 }
             }
 
@@ -162,7 +157,7 @@ namespace AlterTodoistWebApp
             if (button != null)
             {
                 int itemId = GetID(button.ID);
-                QueryDataResult item = todoistItems.FirstOrDefault(i => i.id == itemId);
+                Item item = todoistItems.FirstOrDefault(i => i.id == itemId);
                 if (item != null)
                 {
                     Session["editableItem"] = item;

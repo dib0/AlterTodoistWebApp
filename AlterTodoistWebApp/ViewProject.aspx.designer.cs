@@ -10,7 +10,7 @@
 namespace AlterTodoistWebApp {
     
     
-    public partial class Default {
+    public partial class ViewProject {
         
         /// <summary>
         /// form1 control.

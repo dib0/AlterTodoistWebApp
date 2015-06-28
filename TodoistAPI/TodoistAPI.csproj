@@ -39,7 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\Item.cs" />
     <Compile Include="Business\Project.cs" />
+    <Compile Include="Business\ItemResult.cs" />
     <Compile Include="Business\QueryDataResult.cs" />
     <Compile Include="Business\SyncUpdateItemArgsRequest.cs" />
     <Compile Include="Business\SyncAddItemArgsRequest.cs" />

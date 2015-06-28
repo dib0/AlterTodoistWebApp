@@ -30,6 +30,7 @@ body {
 .itemtext, .undotext
 {
     display: inline-block;
+    max-width:480px;
 }
 
 .itemtext, .undotext
@@ -90,4 +91,16 @@ body {
     margin-left: 2px;
     margin-top: 0px;
     position: absolute;
+}
+
+.viewlb {
+    max-width:100px;
+    min-width:100px;
+}
+
+.viewselection {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    display: inline;
 }

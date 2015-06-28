@@ -16,8 +16,8 @@ namespace TodoistAPI
         private const string baseUri = "todoist.com/API/v6";
         private const string loginUri = "/login?email={0}&password={1}";
         private const string tokenUri = "token={0}";
-        private const string queryUri = "/query?";
-        private const string queryFilterUri = "&queries=\"{0}\"";
+        private const string queryUri = "/query";
+        private const string queryFilterUri = "queries=[{0}]";
         private const string commandUri = "&commands={0}";
         private const string syncUri = "/sync";
 
@@ -87,19 +87,19 @@ namespace TodoistAPI
             if ((queries == null) || (queries.Count() == 0))
                 throw new Exception("No query specified.");
 
-            string uri = baseUri + queryUri + string.Format(tokenUri, Token);
+            string uri = baseUri + queryUri;
             // Add filters
             string filters = string.Empty;
             for (int i=0; i< queries.Count(); i++)
             {
                 if (i > 0)
-                    filters += "," + queries[i];
+                    filters += ", \"" + queries[i] + "\"";
                 else
-                    filters += queries[i];
+                    filters += "\"" + queries[i] + "\"";
             }
-            uri += string.Format(queryFilterUri, filters);
+            string qcommand = string.Format(queryFilterUri, filters);
 
-            List<QueryResult> qResult = PerformGetRequest<List<QueryResult>>(uri);
+            List<QueryResult> qResult = PerformPostRequest<List<QueryResult>>(qcommand, uri);
             List<QueryDataResult> result = new List<QueryDataResult>();
             foreach(QueryResult q in qResult)
             {
@@ -158,6 +158,22 @@ namespace TodoistAPI
             ProjectResult result = PerformPostRequest<ProjectResult>(data, uri);
             result.Projects.Sort(new Comparison<Project>(CompareProject));
             return result.Projects;
+        }
+
+        public List<Item> GetTasksForProject(string projectId)
+        {
+            string uri = baseUri + syncUri;
+            string data = "seq_no=0&seq_no_global=0&resource_types=[\"items\"]";
+
+            List<Item> pResult = new List<Item>();
+            ItemResult result = PerformPostRequest<ItemResult>(data, uri);
+            foreach (Item i in result.Items)
+            {
+                if (i.project_id == projectId && i.@checked == 0)
+                    pResult.Add(i);
+            }
+
+            return pResult;
         }
 
         public void AddNewItem(SyncAddItemArgsRequest item)
