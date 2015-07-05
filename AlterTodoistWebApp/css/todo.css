@@ -52,9 +52,20 @@ body {
 }
 
 .title {
-    color: lightgray;
+    color: gray;
     font-weight:lighter;
     font-size:large;
+}
+
+.subtitle {
+    display:inline;
+    margin-left: 10px;
+}
+
+.subtitletext {
+    color: lightgray;
+    font-weight:lighter;
+    font-size:small;
 }
 
 .menu {
@@ -84,6 +95,11 @@ body {
 .projectlb {
     max-width:250px;
     min-width:250px;
+}
+
+.projectlbA {
+    max-width:400px;
+    min-width:400px;
 }
 
 .version {

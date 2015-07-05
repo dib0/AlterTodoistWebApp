@@ -25,7 +25,22 @@
 <asp:Content ContentPlaceHolderID="scripts" ID="cntScript" runat="server">
     <script>
         $(document).ready(function () {
-            $('select').select2();
+            $('.viewlb').select2();
+        });
+
+
+        $('.viewlb').on('open', function () {
+            $('.viewlb').select2().animate({
+                width: 400
+            },
+                {
+                    step: function () {
+                        $('.viewlb').select2("positionDropdown");
+                    },
+                    complete: function () {
+                        $('.viewlb').select2("positionDropdown");
+                    }
+                });
         });
     </script>
 </asp:Content>

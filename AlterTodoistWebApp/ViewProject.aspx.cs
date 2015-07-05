@@ -37,6 +37,7 @@ namespace AlterTodoistWebApp
         private void LoadProjects()
         {
             ddlProject.Items.Add(new ListItem("Today", "-1"));
+            ddlProject.Items.Add(new ListItem("Tomorrow", "-2"));
 
             foreach (Project p in Projects)
             {
@@ -175,7 +176,10 @@ namespace AlterTodoistWebApp
         {
             Project selected = Projects.FirstOrDefault(p => p.id == ddlProject.SelectedValue);
             if (selected == null)
+            {
+                Session["tmpItemId"] = ddlProject.SelectedValue;
                 Response.Redirect(ConfigurationManager.AppSettings["DefaultPage"]);
+            }
             else
             {
                 Session["viewproject"] = selected;

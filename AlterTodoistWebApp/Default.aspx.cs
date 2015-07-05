@@ -13,12 +13,19 @@ namespace AlterTodoistWebApp
     {
         #region Private properties
         List<QueryDataResult> todoistItems=null;
+        private int selectedItemId = -1;
         #endregion
 
         #region Protected method
         protected override void Page_Load(object sender, EventArgs e)
         {
             base.Page_Load(sender, e);
+
+            if (Session["tmpItemId"] != null)
+            {
+                selectedItemId = int.Parse(Session["tmpItemId"].ToString());
+                Session["tmpItemId"] = null;
+            }
 
             if (!IsPostBack)
                 LoadProjects();
@@ -32,6 +39,7 @@ namespace AlterTodoistWebApp
         private void LoadProjects()
         {
             ddlProject.Items.Add(new ListItem("Today", "-1"));
+            ddlProject.Items.Add(new ListItem("Tomorrow", "-2"));
 
             foreach (Project p in Projects)
             {
@@ -43,9 +51,19 @@ namespace AlterTodoistWebApp
             }
         }
 
+        private void SelectRightItem()
+        {
+            ListItem li = ddlProject.Items.FindByValue(selectedItemId.ToString());
+            if (li != null)
+                li.Selected = true;
+        }
+
         private void LoadTodoItems()
         {
-            todoistItems = todoist.QueryItems("over due", "today");
+            if (selectedItemId == -2)
+                todoistItems = todoist.QueryItems("over due", "tomorrow");
+            else
+                todoistItems = todoist.QueryItems("over due", "today");
         }
 
         private void BuildTodoList()
@@ -65,14 +83,32 @@ namespace AlterTodoistWebApp
                     {
                         HtmlGenericControl titleDiv = new HtmlGenericControl("div");
                         titleDiv.Attributes["class"] = "titletext title";
+                        HtmlGenericControl subTitleDiv = new HtmlGenericControl("div");
+                        subTitleDiv.Attributes["class"] = "subtitletext subtitle";
 
                         // Different days, so a title is needed
                         if (checkDate == today)
+                        {
                             titleDiv.InnerHtml = "Today";
+                            subTitleDiv.InnerHtml = checkDate.DayOfWeek.ToString() + " " + checkDate.ToString("d MMM");
+                        }
+                        else if (checkDate == today.AddDays(1))
+                        {
+                            titleDiv.InnerHtml = "Tomorrow";
+                            subTitleDiv.InnerHtml = checkDate.DayOfWeek.ToString() + " " + checkDate.ToString("d MMM");
+                        }
                         else if (checkDate < today)
+                        {
                             titleDiv.InnerHtml = "Over due";
+                            subTitleDiv.InnerHtml = checkDate.ToString("d MMM");
+                        }
                         else
-                            titleDiv.InnerHtml = checkDate.ToString("dd-MM-yyyy");
+                        {
+                            titleDiv.InnerHtml = checkDate.DayOfWeek.ToString();
+                            subTitleDiv.InnerHtml = checkDate.ToString("d MMM");
+                        }
+
+                        titleDiv.Controls.Add(subTitleDiv);
 
                         itemList.Controls.Add(titleDiv);
                         lastDate = checkDate;
@@ -180,7 +216,13 @@ namespace AlterTodoistWebApp
         {
             Project selected = Projects.FirstOrDefault(p => p.id == ddlProject.SelectedValue);
             if (selected == null)
-                Response.Redirect(ConfigurationManager.AppSettings["DefaultPage"]);
+            {
+                selectedItemId = int.Parse(ddlProject.SelectedValue);
+
+                LoadTodoItems();
+                BuildTodoList();
+                SelectRightItem();
+            }
             else
             {
                 Session["viewproject"] = selected;
