@@ -15,11 +15,24 @@ namespace AlterTodoistWebApp
             string uname = tbUsername.Text;
             string pw = tbPassword.Text;
 
-            TodoistRequest tr = new TodoistRequest();
-            if (tr.Login(uname, pw))
+            if (!string.IsNullOrEmpty(uname) && !string.IsNullOrEmpty(pw))
             {
-                CreateCookie(tr.Token);
-                Response.Redirect(ConfigurationManager.AppSettings["DefaultPage"]);
+                TodoistRequest tr = new TodoistRequest();
+                if (tr.Login(uname, pw))
+                {
+                    CreateCookie(tr.Token);
+                    Response.Redirect(ConfigurationManager.AppSettings["DefaultPage"]);
+                }
+            }
+            else
+            {
+                string gmail = Request.Params["googleEmail"];
+                string gToken = Request.Params["googleToken"];
+
+                if (!string.IsNullOrEmpty(gmail) && !string.IsNullOrEmpty(gToken))
+                {
+
+                }
             }
         }
         #endregion
