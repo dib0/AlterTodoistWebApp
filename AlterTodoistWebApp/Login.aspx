@@ -40,12 +40,9 @@
 <asp:Content ContentPlaceHolderID="scripts" ID="cntScript" runat="server">
     <script>
         function onSignIn(googleUser) {
-            var profile = googleUser.getBasicProfile();
-
-            $('googleEmail').val(profile.getEmail());
-            $('googleToken').val(googleUser.getAuthResponse().id_token);
-
-            __doPostBack();
+            var token = googleUser.getAuthResponse().id_token;
+            var email = googleUser.getBasicProfile().getEmail();
+            $.post(window.location.href, { googleToken: token, googleEmail: email });
         };
 
         $(document).ready(function () {

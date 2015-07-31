@@ -75,6 +75,26 @@ namespace TodoistAPI
             return loggedIn;
         }
 
+        public bool LoginWithGoogle(string email, string token)
+        {
+            if (String.IsNullOrEmpty(email)) throw new ArgumentNullException("email", "You must provide the email address of the google account");
+            if (String.IsNullOrEmpty(token)) throw new ArgumentNullException("token", "You must provide the oauth2 token provided by google on logon");
+
+            const string template = "{0}/login_with_google?email={1}&oauth2_token={2}";
+
+            try
+            {
+                string uri = String.Format(template, baseUri, email, token);
+                LoginResult result = PerformGetRequest<LoginResult>(uri);
+                Token = result.token;
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public List<QueryDataResult> GetItemsToday()
         {
             return QueryItems("today");
