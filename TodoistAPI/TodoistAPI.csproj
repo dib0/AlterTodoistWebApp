@@ -52,7 +52,7 @@
     <Compile Include="Business\SyncResult.cs" />
     <Compile Include="Business\QueryResult.cs" />
     <Compile Include="Business\LoginResult.cs" />
-    <Compile Include="TodoistRequest.cs" />
+    <Compile Include="TodoistApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

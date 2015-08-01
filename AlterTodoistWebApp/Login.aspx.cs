@@ -16,8 +16,7 @@ namespace AlterTodoistWebApp
 
             if (!String.IsNullOrEmpty(gmail) && !String.IsNullOrEmpty(gToken))
             {
-                // dit token is blijkbaar een access token en geen oauth2 token. Ik kom er niet uit hoe je die vertaling doen moet
-                TodoistRequest api = new TodoistRequest();
+                TodoistApi api = new TodoistApi();
                 if ( api.LoginWithGoogle(gmail, gToken) )
                 {
                     CreateCookie(api.Token);
@@ -36,7 +35,7 @@ namespace AlterTodoistWebApp
 
             if (!string.IsNullOrEmpty(uname) && !string.IsNullOrEmpty(pw))
             {
-                TodoistRequest tr = new TodoistRequest();
+                TodoistApi tr = new TodoistApi();
                 if (tr.Login(uname, pw))
                 {
                     CreateCookie(tr.Token);

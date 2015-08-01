@@ -11,7 +11,7 @@ namespace AlterTodoistWebApp
     public partial class BasePage : System.Web.UI.Page
     {
         #region Protected properties
-        protected TodoistRequest todoist;
+        protected TodoistApi todoist;
 
         protected List<Project> Projects
         {
@@ -33,7 +33,7 @@ namespace AlterTodoistWebApp
         protected virtual void Page_Load(object sender, EventArgs e)
         {
             string token = Authenticate();
-            todoist = new TodoistRequest(token);
+            todoist = new TodoistApi(token);
         }
         #endregion
 

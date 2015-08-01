@@ -10,7 +10,7 @@ using TodoistAPI.Business;
 
 namespace TodoistAPI
 {
-    public class TodoistRequest
+    public class TodoistApi
     {
         #region Private properties
         private const string baseUri = "todoist.com/API/v6";
@@ -37,13 +37,13 @@ namespace TodoistAPI
         #endregion
 
         #region Constructor
-        public TodoistRequest()
+        public TodoistApi()
         {
             UseSecureConnection = true;
             ContentType = "application/json";
         }
 
-        public TodoistRequest(string token) : this()
+        public TodoistApi(string token) : this()
         {
             Token = token;
         }
